@@ -5,27 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ablaufplan Vorbereitungsdienst – Studienseminar BBS Mainz</title>
 <style>
+/* Farbpalette angelehnt an bildung.rlp.de: Bordeaux #871d33, Blau #5b7ea2, Anthrazit #2c2c2c, Grautöne */
 :root{
-  --bg:#f5f6f8; --card:#ffffff; --ink:#1d2430; --muted:#5d6878; --line:#dde2ea;
-  --ep:#3d6fb6; --ep-soft:#e5eefa;
-  --hp:#1f8a78; --hp-soft:#e1f3ef;
-  --pp:#c27a12; --pp-soft:#fbf0dc;
-  --accent:#3d6fb6; --warn:#b3412f;
-  --radius:12px;
+  --bg:#ededed; --card:#ffffff; --ink:#2c2c2c; --muted:#737373; --line:#d0d0d0;
+  --ep:#5b7ea2; --ep-soft:#e7edf3;
+  --hp:#871d33; --hp-soft:#f4e8eb;
+  --pp:#454545; --pp-soft:#eaeaea;
+  --accent:#871d33; --warn:#d2000f;
+  --radius:3px; --on:#ffffff;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#14181f; --card:#1d232c; --ink:#e7ebf1; --muted:#9aa5b4; --line:#2f3845;
-    --ep:#6f9be0; --ep-soft:#1f2c40;
-    --hp:#4cc0aa; --hp-soft:#173430;
-    --pp:#e6a24a; --pp-soft:#3a2e1a;
-    --accent:#6f9be0; --warn:#e07a68;
+    --bg:#1a1a1a; --card:#262626; --ink:#ededed; --muted:#a3a3a3; --line:#454545;
+    --ep:#8fadcb; --ep-soft:#26313c;
+    --hp:#c9566f; --hp-soft:#3a2228;
+    --pp:#b5b5b5; --pp-soft:#333333;
+    --accent:#c9566f; --warn:#ff5a5f; --on:#1a1a1a;
   }
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+body{margin:0;font-family:"Open Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.topbar{background:#871d33;height:8px}
 .wrap{max-width:1100px;margin:0 auto;padding:24px 18px 60px}
-header h1{margin:0 0 4px;font-size:1.7rem;letter-spacing:-.01em}
+header{background:var(--card);border-left:6px solid #871d33;padding:16px 20px;border-bottom:1px solid var(--line)}
+header h1{margin:0 0 4px;font-size:1.7rem;letter-spacing:-.01em;color:var(--accent)}
 header p{margin:0;color:var(--muted)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-top:18px}
 h2{font-size:1.15rem;margin:0 0 12px}
@@ -33,18 +36,18 @@ h2{font-size:1.15rem;margin:0 0 12px}
 
 /* Auswahl */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:.92rem;cursor:pointer;transition:.15s}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:3px;padding:7px 14px;font:inherit;font-size:.92rem;cursor:pointer;transition:.15s}
 .chip:hover{border-color:var(--accent)}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on)}
 .row{display:flex;flex-wrap:wrap;gap:22px;margin-top:16px;align-items:flex-end}
-.field select,.field input{font:inherit;padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.field select,.field input{font:inherit;padding:6px 10px;border:1.5px solid var(--line);border-radius:3px;background:var(--card);color:var(--ink)}
 .field input{width:90px}
 .hint{font-size:.85rem;color:var(--muted);margin-top:10px}
 .hint.warn{color:var(--warn)}
 
 /* Steckbrief */
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.fact{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.fact{border:1px solid var(--line);border-radius:3px;padding:12px 14px}
 .fact .k{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .fact .v{font-size:1.25rem;font-weight:700;margin-top:2px}
 .fact .s{font-size:.85rem;color:var(--muted)}
@@ -57,7 +60,7 @@ h2{font-size:1.15rem;margin:0 0 12px}
 .mcol .bar.cap{background:repeating-linear-gradient(45deg,var(--accent) 0 5px,transparent 5px 9px);border:1.5px solid var(--accent);border-bottom:none}
 .mcol .bar.zero{height:3px!important;background:var(--muted);opacity:.4}
 .mcol .val{position:absolute;bottom:calc(var(--h) + 2px);font-size:.7rem;color:var(--muted);font-weight:600}
-.mcol .cell{height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;position:relative}
+.mcol .cell{height:30px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--on);position:relative}
 .mcol .cell.ep{background:var(--ep)} .mcol .cell.hp{background:var(--hp)} .mcol .cell.pp{background:var(--pp)}
 .mcol .mn{font-size:.66rem;color:var(--muted);text-align:center;margin-top:3px;white-space:nowrap;overflow:hidden}
 .mcol .dot{position:absolute;top:-7px;right:-2px;width:13px;height:13px;border-radius:50%;background:var(--card);border:2.5px solid var(--warn)}
@@ -72,12 +75,12 @@ h2{font-size:1.15rem;margin:0 0 12px}
 
 /* Zeitstrahl */
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.btn{font:inherit;font-size:.85rem;padding:6px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.btn{font:inherit;font-size:.85rem;padding:6px 12px;border-radius:3px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
 .btn:hover{border-color:var(--accent)}
 details.phase{border-radius:var(--radius);margin-top:14px;border:1px solid var(--line);background:var(--card);overflow:hidden}
 details.phase>summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:1.05rem}
 details.phase>summary::-webkit-details-marker{display:none}
-details.phase>summary .badge{color:#fff;border-radius:7px;padding:3px 10px;font-size:.8rem;font-weight:700}
+details.phase>summary .badge{color:var(--on);border-radius:2px;padding:3px 10px;font-size:.8rem;font-weight:700}
 details.phase.ep>summary{background:var(--ep-soft)} details.phase.ep .badge{background:var(--ep)}
 details.phase.hp>summary{background:var(--hp-soft)} details.phase.hp .badge{background:var(--hp)}
 details.phase.pp>summary{background:var(--pp-soft)} details.phase.pp .badge{background:var(--pp)}
@@ -87,24 +90,24 @@ details[open]>summary .chev{transform:rotate(90deg)}
 .phase-intro{padding:12px 20px 0;color:var(--muted);font-size:.93rem}
 .tl{position:relative;padding:8px 18px 18px 46px}
 .tl::before{content:"";position:absolute;left:26px;top:14px;bottom:22px;width:3px;border-radius:2px;background:var(--line)}
-details.ev{position:relative;margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+details.ev{position:relative;margin-top:10px;border:1px solid var(--line);border-radius:3px;background:var(--card)}
 details.ev::before{content:"";position:absolute;left:-27px;top:15px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--c,var(--accent))}
 details.ev>summary{list-style:none;cursor:pointer;padding:10px 14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
 details.ev>summary::-webkit-details-marker{display:none}
 .ev .m{font-size:.78rem;font-weight:700;color:var(--c,var(--accent));white-space:nowrap;min-width:150px}
 .ev .t{font-weight:650}
-.ev .tag{font-size:.72rem;border-radius:5px;padding:1px 7px;background:var(--bg);color:var(--muted);border:1px solid var(--line);margin-left:auto}
+.ev .tag{font-size:.72rem;border-radius:2px;padding:1px 7px;background:var(--bg);color:var(--muted);border:1px solid var(--line);margin-left:auto}
 .ev .body{padding:0 16px 14px 16px;font-size:.93rem;border-top:1px dashed var(--line)}
 .ev .body ul{margin:8px 0;padding-left:20px}
 .ev .body li{margin:3px 0}
 .ev .src{font-size:.78rem;color:var(--muted);margin-top:6px}
 .ev.hl{box-shadow:0 0 0 3px var(--accent)}
 .ev.dim{opacity:.35}
-.cat-gespraech{--c:#b3412f} .cat-unterricht{--c:#3d6fb6} .cat-seminar{--c:#1f8a78}
-.cat-pruefung{--c:#c27a12} .cat-frist{--c:#8a4fb3} .cat-notiz{--c:#5d6878}
+.cat-gespraech{--c:#871d33} .cat-unterricht{--c:#5b7ea2} .cat-seminar{--c:#2c2c2c}
+.cat-pruefung{--c:#871d33} .cat-frist{--c:#d2000f} .cat-notiz{--c:#737373}
 @media (prefers-color-scheme: dark){
-  .cat-gespraech{--c:#e07a68} .cat-unterricht{--c:#6f9be0} .cat-seminar{--c:#4cc0aa}
-  .cat-pruefung{--c:#e6a24a} .cat-frist{--c:#b88ae0} .cat-notiz{--c:#9aa5b4}
+  .cat-gespraech{--c:#c9566f} .cat-unterricht{--c:#8fadcb} .cat-seminar{--c:#d0d0d0}
+  .cat-pruefung{--c:#c9566f} .cat-frist{--c:#ff5a5f} .cat-notiz{--c:#a3a3a3}
 }
 
 /* Tabellen & Info */
@@ -119,7 +122,7 @@ th{background:var(--bg);font-weight:650}
 td.cur,th.cur{background:var(--ep-soft)}
 .qs{font-size:.75rem;color:var(--muted);white-space:nowrap}
 .jgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-.jgrid div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.9rem}
+.jgrid div{border:1px solid var(--line);border-radius:3px;padding:12px 14px;font-size:.9rem}
 .jgrid b{display:block;margin-bottom:4px}
 .jgrid span{color:var(--muted);font-size:.8rem}
 dl.abk{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:.9rem;margin:0}
@@ -140,7 +143,7 @@ footer{margin-top:26px;font-size:.8rem;color:var(--muted)}
 }
 </style>
 </head>
-<body>
+<body><div class="topbar"></div>
 <div class="wrap">
 
 <header>
