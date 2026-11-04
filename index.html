@@ -231,7 +231,7 @@ const CFG = {
     pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach, 3 mündliche Teilprüfungen à 30 Min.",
     pgb:null, ubN:3, umN:1, faecher:2,
     hours:m=> m<=3?{v:0,l:"Hosp."}:{v:10},
-    hoursNote:`<ul><li><b>Monat 1–3:</b> kein eigenverantwortlicher Unterricht. Hospitationen an 3 Tagen pro Woche (Mo, Di, Fr), ab etwa Mitte der Einführungsphase erste Unterrichtsversuche (Werkstattunterricht, Intensivwoche).</li><li><b>Ab Monat 4:</b> Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>10 eigenverantwortlich</b>. Der Rest ist angeleiteter Unterricht oder Hospitation (LVO § 12 Abs. 4).</li><li>Die Stunden sollen sinnvoll auf unterschiedliche Schulformen verteilt werden.</li></ul>`,
+    hoursNote:`<ul><li><b>Monat 1–3:</b> kein eigenverantwortlicher Unterricht. Hospitationen an der Ausbildungsschule (Mo und Fr), ab etwa Mitte der Einführungsphase erste Unterrichtsversuche (Werkstattunterricht, Intensivwoche).</li><li><b>Ab Monat 4:</b> Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>10 eigenverantwortlich</b>. Der Rest ist angeleiteter Unterricht oder Hospitation (LVO § 12 Abs. 4).</li><li>Die Stunden sollen sinnvoll auf unterschiedliche Schulformen verteilt werden.</li></ul>`,
     bp:"46 (15 BV, 11 AV, 4 TOP, 16 SV) + 3–5 ORGA", fd:"40"
   },
   vd24:{
@@ -243,7 +243,7 @@ const CFG = {
     pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach, 3 mündliche Teilprüfungen à 30 Min.",
     pgb:"1–2 der 8 Veranstaltungen", ubN:5, umN:1, faecher:2,
     hours:m=> m<=3?{v:0,l:"Hosp."}:{v:7},
-    hoursNote:`<ul><li><b>Monat 1–3:</b> kein eigenverantwortlicher Unterricht, Hospitationen an 3 Tagen pro Woche. An max. zwei Freitagnachmittagen Pädagogische Grundbildung im Seminar.</li><li><b>Ab Monat 4:</b> Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>7 eigenverantwortlich</b> (Sonderregel Quereinstieg, LVO § 12 Abs. 4).</li></ul>`,
+    hoursNote:`<ul><li><b>Monat 1–3:</b> kein eigenverantwortlicher Unterricht, Hospitationen an der Ausbildungsschule (Mo und Fr). An max. zwei Freitagnachmittagen Pädagogische Grundbildung im Seminar.</li><li><b>Ab Monat 4:</b> Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>7 eigenverantwortlich</b> (Sonderregel Quereinstieg, LVO § 12 Abs. 4).</li></ul>`,
     bp:"56 (15 BV, 13 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"44"
   },
   lw:{
@@ -255,7 +255,7 @@ const CFG = {
     pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach, 3 mündliche Teilprüfungen à 30 Min.",
     pgb:"1–2 der 8 Veranstaltungen", ubN:3, umN:1, faecher:2,
     hours:m=> m<=3?{v:0,l:"Hosp."}:{v:10},
-    hoursNote:`<ul><li><b>Monat 1–3:</b> Hospitationen an 3 Tagen pro Woche. An max. zwei Freitagnachmittagen Pädagogische Grundbildung.</li><li><b>Ab Monat 4:</b> Regelfall nach LVO § 12 Abs. 4: 12 Wochenstunden Ausbildungsunterricht, davon 10 eigenverantwortlich. Für LWRef nennt das Journal keine Abweichung.</li></ul>`,
+    hoursNote:`<ul><li><b>Monat 1–3:</b> Hospitationen an der Ausbildungsschule (Mo und Fr). An max. zwei Freitagnachmittagen Pädagogische Grundbildung.</li><li><b>Ab Monat 4:</b> Regelfall nach LVO § 12 Abs. 4: 12 Wochenstunden Ausbildungsunterricht, davon 10 eigenverantwortlich. Für LWRef nennt das Journal keine Abweichung.</li></ul>`,
     durNote:"Die Gesamtdauer nennt das Journal für LWRef nicht. Bitte oben die passende Dauer wählen.",
     bp:"54 (15 BV, 11 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"40"
   },
@@ -273,7 +273,7 @@ const CFG = {
       if(m<=12) return {v:dep*2/3};
       return {v:dep*3/4};
     },
-    hoursNote:dep=>`<ul><li><b>Monat 1–3: Intensivausbildung</b> (VV Nr. 5.1). Wochenplan wie in der Einführungsphase: Hospitationen, Seminartage Mi/Do, Freitagnachmittag Pädagogische Grundbildung.</li><li><b>Monat 4–6:</b> Freistellung von <b>der Hälfte</b> der Unterrichtsverpflichtung, also ${fmt(dep/2)} Std. Unterricht.</li><li><b>Monat 7–12 (2. Halbjahr):</b> Freistellung von <b>einem Drittel</b>, also ${fmt(dep*2/3)} Std. Unterricht.</li><li><b>Monat 13–24 (2. Ausbildungsjahr):</b> Freistellung von <b>einem Viertel</b>, also ${fmt(dep*3/4)} Std. Unterricht.</li><li>Die Werte sind mit einem vollen Deputat von ${fmt(dep)} Std. gerechnet. Oben lässt sich das Deputat anpassen.</li></ul>`,
+    hoursNote:dep=>`<ul><li><b>Monat 1–3: Intensivausbildung</b> (VV Nr. 5.1). Wochenplan wie in der Einführungsphase: Hospitationen, Seminartage Di/Mi/Do, Freitagnachmittag Pädagogische Grundbildung.</li><li><b>Monat 4–6:</b> Freistellung von <b>der Hälfte</b> der Unterrichtsverpflichtung, also ${fmt(dep/2)} Std. Unterricht.</li><li><b>Monat 7–12 (2. Halbjahr):</b> Freistellung von <b>einem Drittel</b>, also ${fmt(dep*2/3)} Std. Unterricht.</li><li><b>Monat 13–24 (2. Ausbildungsjahr):</b> Freistellung von <b>einem Viertel</b>, also ${fmt(dep*3/4)} Std. Unterricht.</li><li>Die Werte sind mit einem vollen Deputat von ${fmt(dep)} Std. gerechnet. Oben lässt sich das Deputat anpassen.</li></ul>`,
     bp:"56 (15 BV, 13 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"44"
   },
   fl:{
@@ -285,7 +285,7 @@ const CFG = {
     pr:"2 PU + 2 mündl.", prS:"2 Prüfungsunterrichte in 2 Schulformen am selben Tag; Präsentation (30 Min.) + BP (30 Min.)",
     pgb:"4 der 8 Veranstaltungen", ubN:3, umN:4, faecher:1,
     hours:m=> m<=3?{v:0,l:"Hosp."}:{v:12,cap:true},
-    hoursNote:`<ul><li><b>Monat 1–3:</b> Einführungsphase mit Hospitationen an 3 Tagen pro Woche. Freitags auch Pädagogische Grundbildung (4 der 8 Veranstaltungen).</li><li><b>Danach:</b> Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b>. Zusätzlich kann die (teilweise) Übernahme einzelner Stunden dazukommen (VV Nr. 7.3).</li><li>Ab wann genau die Stunden gelten, legt das Journal nicht fest. Die Balken zeigen deshalb die Obergrenze ab Monat 4.</li></ul>`,
+    hoursNote:`<ul><li><b>Monat 1–3:</b> Einführungsphase mit Hospitationen an der Ausbildungsschule (Mo und Fr). Freitags auch Pädagogische Grundbildung (4 der 8 Veranstaltungen).</li><li><b>Danach:</b> Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b>. Zusätzlich kann die (teilweise) Übernahme einzelner Stunden dazukommen (VV Nr. 7.3).</li><li>Ab wann genau die Stunden gelten, legt das Journal nicht fest. Die Balken zeigen deshalb die Obergrenze ab Monat 4.</li></ul>`,
     durNote:"Die Gesamtdauer nennt das Journal nicht. Dargestellt sind standardmäßig 24 Monate; bei Bedarf oben anpassen.",
     bp:"49 (15 BV, 6 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"30"
   },
@@ -298,7 +298,7 @@ const CFG = {
     pr:"1 PU + 2 mündl.", prS:"1 Prüfungsunterricht; Präsentation (30 Min.) + BP (20 Min.)",
     pgb:"4 der 8 Veranstaltungen", ubN:3, umN:2, faecher:1,
     hours:m=> m<=3?{v:0,l:"Hosp."}:{v:12,cap:true},
-    hoursNote:`<ul><li><b>Monat 1–3:</b> Einführungsphase mit Hospitationen an 3 Tagen pro Woche. Freitags auch Pädagogische Grundbildung (4 der 8 Veranstaltungen).</li><li><b>Danach:</b> Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b> (VV Nr. 7.3).</li><li>Ab wann genau die Stunden gelten, legt das Journal nicht fest. Die Balken zeigen deshalb die Obergrenze ab Monat 4.</li></ul>`,
+    hoursNote:`<ul><li><b>Monat 1–3:</b> Einführungsphase mit Hospitationen an der Ausbildungsschule (Mo und Fr). Freitags auch Pädagogische Grundbildung (4 der 8 Veranstaltungen).</li><li><b>Danach:</b> Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b> (VV Nr. 7.3).</li><li>Ab wann genau die Stunden gelten, legt das Journal nicht fest. Die Balken zeigen deshalb die Obergrenze ab Monat 4.</li></ul>`,
     durNote:"Die Gesamtdauer nennt das Journal nicht. Dargestellt sind standardmäßig 24 Monate; bei Bedarf oben anpassen.",
     bp:"36 (15 BV, 1 AV, 4 TOP, 8 PGB, 8 SV) + 3–5 ORGA", fd:"25"
   }
@@ -329,14 +329,14 @@ const EV = [
  {ph:"ep",m:[1,3],cat:"seminar",t:"Wochenplan der Einführungsphase",tag:"Woche",
   d:(k,c)=>`<table><tr><th>Tag</th><th>Ort</th><th>Inhalt</th></tr>
   <tr><td>Montag</td><td>Ausbildungsschule</td><td>Hospitationen, schulorganisatorische Abläufe, Schulrecht</td></tr>
-  <tr><td>Dienstag</td><td>Ausbildungsschule / Schulen der Fachleitungen</td><td>Vom Seminar organisiert: Hospitationen bei Fachleitungen, Modellschulen, Kooperationspartner, Workshop Unterrichtsplanung</td></tr>
+  <tr><td>Dienstag</td><td>Seminar</td><td>Ausbildungsveranstaltungen am Studienseminar<br><small>(aktuelle Praxis; laut Journal ein vom Seminar organisierter Schulpraxistag mit Hospitationen bei Fachleitungen, Modellschulen usw.)</small></td></tr>
   <tr><td>Mittwoch</td><td>Seminar</td><td>Ausbildungsveranstaltungen 8:45–11:45 und 13:15–16:15 (mind. 90 Min. Präsenz)</td></tr>
   <tr><td>Donnerstag</td><td>Seminar</td><td>wie Mittwoch</td></tr>
   <tr><td>Freitag</td><td>Ausbildungsschule</td><td>Hospitationen, Schulorganisation, Schulrecht${c.pgb?`<br><b>Nachmittags: Pädagogische Grundbildung im Seminar</b> (${c.pgb} in der Einführungsphase)`:""}</td></tr></table>`},
  {ph:"ep",m:[1,3],cat:"seminar",t:"Veranstaltungen der Einführungsphase",tag:"Pflicht",
   d:(k,c)=>`<ul><li>Organisationsveranstaltungen</li><li><b>15 Basisveranstaltungen</b> (inkl. 1 Rechtsveranstaltung und 2 Planungsworkshops Lehrplan)</li><li>1 fachdidaktische Basisveranstaltung (BV FD) und 1 fachdidaktisch-übergreifende (BV FDÜ) ${c.faecher===2?"<b>pro Fach</b>":""}</li><li><b>4 Veranstaltungen Inklusion / Berufsförderpädagogik</b> (u. a. Lebenswelt der Lernenden, rechtliche Grundlagen &amp; Heterogenität)</li><li>Mentoriatstag (Orientierung für die schulische Vertretung)</li><li>Beratungsgespräch zum Digitalen Notizbuch</li><li>Erlebnispädagogischer Tag</li><li>Planung und Organisation eines Seminarfestes</li>${c.pgb?`<li>Pädagogische Grundbildung: ${c.pgb} finden in der Einführungsphase statt (Freitagnachmittag)</li>`:""}</ul>`},
- {ph:"ep",m:[1,3],cat:"unterricht",t:"Hospitationen (3 Tage pro Woche)",tag:"Schule",
-  d:()=>`<ul><li>Teilnehmende Beobachtung bei erfahrenen Lehrkräften: Mo/Fr organisiert die Schule, dienstags das Seminar (Hospitationsplan).</li><li>Fachspezifische Hospitationen bei den eigenen Fachleitungen, i. d. R. <b>mind. 2× pro Fach</b> in den ersten drei Monaten, dienstags.</li><li>Mit der Fachleitung vorab <b>Beobachtungsaufträge</b> vereinbaren (Kriterien + Indikatoren), z. B. Interaktion, Impulse, Sozialformen.</li><li>Mitschrift: Wahrnehmungen strikt von Interpretationen trennen. In der Nachbesprechung 2–3 Aspekte nach Feedback-Regeln einbringen.</li><li>Erkenntnisse ggf. im Digitalen Notizbuch festhalten.</li></ul>`},
+ {ph:"ep",m:[1,3],cat:"unterricht",t:"Hospitationen (Mo und Fr)",tag:"Schule",
+  d:()=>`<ul><li>Teilnehmende Beobachtung bei erfahrenen Lehrkräften: montags und freitags an der Ausbildungsschule, organisiert von der Schule.</li><li>Fachspezifische Hospitationen bei den eigenen Fachleitungen, i. d. R. <b>mind. 2× pro Fach</b> in den ersten drei Monaten (Termine nach Absprache).</li><li>Mit der Fachleitung vorab <b>Beobachtungsaufträge</b> vereinbaren (Kriterien + Indikatoren), z. B. Interaktion, Impulse, Sozialformen.</li><li>Mitschrift: Wahrnehmungen strikt von Interpretationen trennen. In der Nachbesprechung 2–3 Aspekte nach Feedback-Regeln einbringen.</li><li>Erkenntnisse ggf. im Digitalen Notizbuch festhalten.</li></ul>`},
  {ph:"ep",m:[1,3],cat:"notiz",t:"Digitales Notizbuch anlegen",tag:"Reflexion",
   d:()=>`<ul><li>Format: <b>OneNote, Padlet/Taskcard oder Moodle</b>, passwortgeschützt. Umfang max. ca. <b>30 DIN-A4-Seiten</b>.</li><li>Gliederung nach den <b>5 Modulen</b> und den Kompetenzen des <b>Kompetenzrasters</b>.</li><li>Verbindlich: Belege zu den Schwerpunktkriterien aus den Beratungen, Konsequenzen nach UM/UB, Reflexion der Didaktischen Abschnittsplanungen (M4) mit passenden Leistungsfeststellungen (M5), Reflexion schulischer Erfahrungen.</li><li><b>Nicht hinein:</b> UB-Entwürfe, Klassenanalysen, Abschnittsplanungen (die gehen in Xi), Veranstaltungsunterlagen.</li><li>Wird über die gesamte Ausbildung „en passant“ geführt, kurz und stichpunktartig („Ein Mehr an Einsichten statt ein Meer an Text“).</li></ul>`},
  {ph:"ep",m:[2,3],cat:"unterricht",t:"Werkstattunterricht & Intensivwoche",tag:"erster Unterricht",
@@ -472,7 +472,7 @@ function rangeLabel(a,b){
 function renderTimeline(){
   const k=st.cfg, c=CFG[k], D=dur();
   const phases=[
-    {id:"ep",t:"Einführungsphase",r:[1,3],intro:"Basiskompetenzen für den eigenverantwortlichen Unterricht: Seminartage Mi/Do, Schulpraxis Mo/Di/Fr, Hospitationen."},
+    {id:"ep",t:"Einführungsphase",r:[1,3],intro:"Basiskompetenzen für den eigenverantwortlichen Unterricht: Seminartage Di/Mi/Do, Schulpraxis Mo/Fr, Hospitationen."},
     {id:"hp",t:"Hauptphase",r:[4,D-3],intro:"Eigener Unterricht, modularisierte Veranstaltungen nach eigenem Profil, UM/UB, Beratungsgespräche."},
     {id:"pp",t:"Prüfungsphase",r:[D-2,D],intro:"Lage nur ungefähr: Die Prüfungstermine bestimmt das Landesprüfungsamt. Ab 4 Wochen vor der Prüfung keine Veranstaltungen mehr."}
   ];
