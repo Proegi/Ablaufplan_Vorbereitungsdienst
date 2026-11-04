@@ -117,6 +117,7 @@ table{border-collapse:collapse;width:100%;font-size:.88rem}
 th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
 th{background:var(--bg);font-weight:650}
 td.cur,th.cur{background:var(--ep-soft)}
+.qs{font-size:.75rem;color:var(--muted);white-space:nowrap}
 .jgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
 .jgrid div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.9rem}
 .jgrid b{display:block;margin-bottom:4px}
@@ -201,7 +202,7 @@ footer{margin-top:26px;font-size:.8rem;color:var(--muted)}
 <details class="info">
   <summary><span class="chev">&#9656;</span> Vergleich aller Ausbildungswege</summary>
   <div class="in"><div class="tbl-wrap" id="compare"></div>
-  <p class="hint">Veranstaltungszahlen laut Journal Modulsystem (Stand 2013). Maßgeblich ist der aktuelle Professionalisierungsnachweis bzw. Stud.IP.</p></div>
+  <p class="hint">Zahlen in Klammern = Kapitel im maßgeblichen PDF der Spalte. Abweichende Quellen sind mit Namen angegeben. Die Veranstaltungszahlen stammen aus dem Journal Modulsystem (Stand 2013). Verbindlich sind der aktuelle Professionalisierungsnachweis bzw. Stud.IP.</p></div>
 </details>
 
 <details class="info">
@@ -512,20 +513,28 @@ function applySel(scroll){
 }
 
 function renderCompare(){
+  /* Werte je Spalte: [Text, Quelle]; Quelle als Kapitel im maßgeblichen PDF, andere PDFs ausdrücklich benannt */
+  const MS="Modulsystem 2013";
+  const PDF={vd18:"Orga VD18/VD24/LW",vd24:"Orga VD18/VD24/LW",lw:"Orga VD18/VD24/LW",se:"Orga SE",fl:"Orga FL/LfFP",lffp:"Orga FL/LfFP"};
   const rows=[
-    ["Dauer",k=>CFG[k].durFix?CFG[k].dur+" Monate":"nicht im Journal genannt"],
-    ["Rechtsgrundlage",k=>CFG[k].recht],
-    ["Ausbildungseinheiten",k=>CFG[k].ae+"<br><small>"+CFG[k].aeS+"</small>"],
-    ["Unterricht",k=>CFG[k].hoursText+"<br><small>"+CFG[k].hoursS+"</small>"],
-    ["UM / UB",k=>CFG[k].ub+"<br><small>"+CFG[k].ubS+"</small>"],
-    ["Päd. Grundbildung",k=>CFG[k].pgb?"8 Veranst., davon "+CFG[k].pgb+" in der Einführungsphase":"–"],
-    ["BP-Veranstaltungen (min.)",k=>CFG[k].bp],
-    ["FD-Veranstaltungen (min.)",k=>CFG[k].fd],
-    ["Praktische Prüfung",k=>k==="lffp"?"1 PU, Thema 5 WT vorher":k==="fl"?"2 PU in 2 Schulformen am selben Tag, Themen 10 WT vorher":"je Fach 1 PU, Themen 5 WT vorher (10 WT bei gleichem Tag)"],
-    ["Mündliche Prüfung",k=>k==="lffp"?"Präsentation 30 Min. + BP 20 Min.":k==="fl"?"Präsentation 30 Min. + BP 30 Min.":"Präsentation + FD anderes Fach + BP, je 30 Min."],
-    ["Präsentationsthema",k=>isFL(k)?"20 WT vorher":"5 WT vorher"]
+    ["Dauer",{vd18:["18 Monate","Titel"],vd24:["24 Monate","Titel"],lw:["nicht genannt"],se:["24 Monate","3.1"],fl:["nicht genannt"],lffp:["nicht genannt"]}],
+    ["Rechtsgrundlage",{vd18:["LVO 2012","1.1"],vd24:["LVO 2012","1.1"],lw:["LVO 2012","1.1"],se:["LehrSeitVO 2023, VV 2021","1.1, 1.2"],fl:["LVO 2013, VV 2013","1.1, 1.2"],lffp:["LVO 2013, VV 2013","1.1, 1.2"]}],
+    ["Ausbildungseinheiten",{vd18:["86 AE","1.1"],vd24:["86 AE","1.1"],lw:["86 AE","1.1"],se:["40 AE: 12 BP, je 10 FD, 8 sonst.","1.2"],fl:["61 AE: 25 BP, 20 FD, 16 sonst.","1.2"],lffp:["53 AE: 20 BP, 25 FD, 8 sonst.","1.2"]}],
+    ["Unterricht",{vd18:["ab Monat 4: 10 von 12 Std. eigenverantw.","3.1"],vd24:["ab Monat 4: 7 von 12 Std. eigenverantw.","3.1"],lw:["ab Monat 4: 10 von 12 Std. (keine Abweichung genannt)","3.1"],se:["Freistellung ½ (M 4–6), ⅓ (M 7–12), ¼ (2. Jahr)","3.1"],fl:["max. 20 Std., davon ≤ 12 selbstständig","3.1"],lffp:["max. 20 Std., davon ≤ 12 selbstständig","3.1"]}],
+    ["UM / UB",{vd18:["≥ 1 UM + ≥ 3 UB je Fach","4.2"],vd24:["≥ 1 UM + ≥ 5 UB je Fach","4.2"],lw:["≥ 1 UM + ≥ 3 UB je Fach","4.2"],se:["≥ 1 UM + ≥ 5 UB je Fach","4.2"],fl:["≥ 4 UM + ≥ 3 UB","4.2"],lffp:["2 UM + ≥ 3 UB","4.2"]}],
+    ["Päd. Grundbildung",{vd18:["–"],vd24:["8 Veranst., davon 1–2 in EP","1.8"],lw:["8 Veranst., davon 1–2 in EP","1.8"],se:["8 Veranst., davon 2 in EP","1.9"],fl:["8 Veranst., davon 4 in EP","1.9"],lffp:["8 Veranst., davon 4 in EP","1.9"]}],
+    ["BP-Veranstaltungen (min.)",Object.fromEntries(ORDER.map(k=>[k,[CFG[k].bp,MS]]))],
+    ["FD-Veranstaltungen (min.)",Object.fromEntries(ORDER.map(k=>[k,[CFG[k].fd,MS]]))],
+    ["Praktische Prüfung",{vd18:["je Fach 1 PU; Themen 5 WT vorher, 10 WT bei gleichem Tag","8.1"],vd24:["je Fach 1 PU; Themen 5 WT vorher, 10 WT bei gleichem Tag","8.1"],lw:["je Fach 1 PU; Themen 5 WT vorher, 10 WT bei gleichem Tag","8.1"],se:["je Fach 1 PU; Themen 5 WT vorher, 10 WT bei gleichem Tag","8.1"],fl:["2 PU, 2 Schulformen, gleicher Tag; Themen 10 WT vorher","8.1"],lffp:["1 PU; Thema 5 WT vorher","8.1"]}],
+    ["Mündliche Prüfung",{vd18:["3 × 30 Min.: Präsentation, FD anderes Fach, BP","10.1"],vd24:["3 × 30 Min.: Präsentation, FD anderes Fach, BP","10.1"],lw:["3 × 30 Min.: Präsentation, FD anderes Fach, BP","10.1"],se:["3 × 30 Min.: Präsentation, FD anderes Fach, BP","9.1"],fl:["Präsentation 30 Min. + BP 30 Min.","9.1"],lffp:["Präsentation 30 Min. + BP 20 Min.","9.1"]}],
+    ["Präsentationsthema",{vd18:["5 WT vorher","9.7"],vd24:["5 WT vorher","9.7"],lw:["5 WT vorher","9.7"],se:["5 WT vorher","9.1"],fl:["20 WT vorher","9.1"],lffp:["20 WT vorher","9.1"]}]
   ];
-  $("#compare").innerHTML=`<table><tr><th></th>${ORDER.map(k=>`<th class="${k===st.cfg?"cur":""}">${CFG[k].name}</th>`).join("")}</tr>${rows.map(([l,f])=>`<tr><th>${l}</th>${ORDER.map(k=>`<td class="${k===st.cfg?"cur":""}">${f(k)}</td>`).join("")}</tr>`).join("")}</table>`;
+  const cls=k=>k===st.cfg?"cur":"";
+  const cell=([t,s])=>t+(s?` <span class="qs">(${s})</span>`:"");
+  $("#compare").innerHTML=`<table>
+    <tr><th></th>${ORDER.map(k=>`<th class="${cls(k)}">${CFG[k].name}<br><small style="font-weight:500">${CFG[k].long}</small></th>`).join("")}</tr>
+    <tr><th>Maßgebliches PDF</th>${ORDER.map(k=>`<td class="${cls(k)}"><b>Journal ${PDF[k]}</b><br><small>Stand 24.04.2026</small></td>`).join("")}</tr>
+    ${rows.map(([l,v])=>`<tr><th>${l}</th>${ORDER.map(k=>`<td class="${cls(k)}">${cell(v[k])}</td>`).join("")}</tr>`).join("")}</table>`;
 }
 
 const JOURNALS=[
