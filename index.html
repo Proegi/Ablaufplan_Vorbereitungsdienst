@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ablaufplan Vorbereitungsdienst – Studienseminar BBS Mainz</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --ink:#1d2430; --muted:#5d6878; --line:#dde2ea;
+  --ep:#3d6fb6; --ep-soft:#e5eefa;
+  --hp:#1f8a78; --hp-soft:#e1f3ef;
+  --pp:#c27a12; --pp-soft:#fbf0dc;
+  --accent:#3d6fb6; --warn:#b3412f;
+  --radius:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14181f; --card:#1d232c; --ink:#e7ebf1; --muted:#9aa5b4; --line:#2f3845;
+    --ep:#6f9be0; --ep-soft:#1f2c40;
+    --hp:#4cc0aa; --hp-soft:#173430;
+    --pp:#e6a24a; --pp-soft:#3a2e1a;
+    --accent:#6f9be0; --warn:#e07a68;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 18px 60px}
+header h1{margin:0 0 4px;font-size:1.7rem;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-top:18px}
+h2{font-size:1.15rem;margin:0 0 12px}
+.lbl{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px}
+
+/* Auswahl */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:.92rem;cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.row{display:flex;flex-wrap:wrap;gap:22px;margin-top:16px;align-items:flex-end}
+.field select,.field input{font:inherit;padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.field input{width:90px}
+.hint{font-size:.85rem;color:var(--muted);margin-top:10px}
+.hint.warn{color:var(--warn)}
+
+/* Steckbrief */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.fact{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.fact .k{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.fact .v{font-size:1.25rem;font-weight:700;margin-top:2px}
+.fact .s{font-size:.85rem;color:var(--muted)}
+
+/* Monatsleiste */
+.ribbon{display:grid;gap:3px;margin-top:6px}
+.mcol{display:flex;flex-direction:column;align-items:stretch;cursor:pointer;min-width:0}
+.mcol .bar-area{height:110px;display:flex;align-items:flex-end;justify-content:center;position:relative}
+.mcol .bar{width:72%;border-radius:4px 4px 0 0;background:var(--accent);opacity:.85;transition:.15s}
+.mcol .bar.cap{background:repeating-linear-gradient(45deg,var(--accent) 0 5px,transparent 5px 9px);border:1.5px solid var(--accent);border-bottom:none}
+.mcol .bar.zero{height:3px!important;background:var(--muted);opacity:.4}
+.mcol .val{position:absolute;bottom:calc(var(--h) + 2px);font-size:.7rem;color:var(--muted);font-weight:600}
+.mcol .cell{height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;position:relative}
+.mcol .cell.ep{background:var(--ep)} .mcol .cell.hp{background:var(--hp)} .mcol .cell.pp{background:var(--pp)}
+.mcol .mn{font-size:.66rem;color:var(--muted);text-align:center;margin-top:3px;white-space:nowrap;overflow:hidden}
+.mcol .dot{position:absolute;top:-7px;right:-2px;width:13px;height:13px;border-radius:50%;background:var(--card);border:2.5px solid var(--warn)}
+.mcol.sel .cell{outline:3px solid var(--ink);outline-offset:1px}
+.mcol:hover .cell{filter:brightness(1.1)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.85rem;color:var(--muted);margin-top:12px}
+.legend i{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.legend i.c{border-radius:50%;background:var(--card);border:2.5px solid var(--warn)}
+.legend i.h{background:repeating-linear-gradient(45deg,var(--accent) 0 3px,transparent 3px 6px);border:1px solid var(--accent)}
+.hours-note{margin-top:12px;font-size:.9rem}
+.hours-note ul{margin:6px 0 0;padding-left:20px}
+
+/* Zeitstrahl */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.btn{font:inherit;font-size:.85rem;padding:6px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+details.phase{border-radius:var(--radius);margin-top:14px;border:1px solid var(--line);background:var(--card);overflow:hidden}
+details.phase>summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:1.05rem}
+details.phase>summary::-webkit-details-marker{display:none}
+details.phase>summary .badge{color:#fff;border-radius:7px;padding:3px 10px;font-size:.8rem;font-weight:700}
+details.phase.ep>summary{background:var(--ep-soft)} details.phase.ep .badge{background:var(--ep)}
+details.phase.hp>summary{background:var(--hp-soft)} details.phase.hp .badge{background:var(--hp)}
+details.phase.pp>summary{background:var(--pp-soft)} details.phase.pp .badge{background:var(--pp)}
+details.phase>summary .when{margin-left:auto;font-weight:500;font-size:.88rem;color:var(--muted)}
+summary .chev{transition:transform .2s;display:inline-block}
+details[open]>summary .chev{transform:rotate(90deg)}
+.phase-intro{padding:12px 20px 0;color:var(--muted);font-size:.93rem}
+.tl{position:relative;padding:8px 18px 18px 46px}
+.tl::before{content:"";position:absolute;left:26px;top:14px;bottom:22px;width:3px;border-radius:2px;background:var(--line)}
+details.ev{position:relative;margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+details.ev::before{content:"";position:absolute;left:-27px;top:15px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--c,var(--accent))}
+details.ev>summary{list-style:none;cursor:pointer;padding:10px 14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+details.ev>summary::-webkit-details-marker{display:none}
+.ev .m{font-size:.78rem;font-weight:700;color:var(--c,var(--accent));white-space:nowrap;min-width:150px}
+.ev .t{font-weight:650}
+.ev .tag{font-size:.72rem;border-radius:5px;padding:1px 7px;background:var(--bg);color:var(--muted);border:1px solid var(--line);margin-left:auto}
+.ev .body{padding:0 16px 14px 16px;font-size:.93rem;border-top:1px dashed var(--line)}
+.ev .body ul{margin:8px 0;padding-left:20px}
+.ev .body li{margin:3px 0}
+.ev .src{font-size:.78rem;color:var(--muted);margin-top:6px}
+.ev.hl{box-shadow:0 0 0 3px var(--accent)}
+.ev.dim{opacity:.35}
+.cat-gespraech{--c:#b3412f} .cat-unterricht{--c:#3d6fb6} .cat-seminar{--c:#1f8a78}
+.cat-pruefung{--c:#c27a12} .cat-frist{--c:#8a4fb3} .cat-notiz{--c:#5d6878}
+@media (prefers-color-scheme: dark){
+  .cat-gespraech{--c:#e07a68} .cat-unterricht{--c:#6f9be0} .cat-seminar{--c:#4cc0aa}
+  .cat-pruefung{--c:#e6a24a} .cat-frist{--c:#b88ae0} .cat-notiz{--c:#9aa5b4}
+}
+
+/* Tabellen & Info */
+details.info{margin-top:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+details.info>summary{cursor:pointer;padding:14px 18px;font-weight:700;list-style:none;display:flex;gap:10px;align-items:center}
+details.info>summary::-webkit-details-marker{display:none}
+details.info .in{padding:0 18px 18px}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-weight:650}
+td.cur,th.cur{background:var(--ep-soft)}
+.jgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.jgrid div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.9rem}
+.jgrid b{display:block;margin-bottom:4px}
+.jgrid span{color:var(--muted);font-size:.8rem}
+dl.abk{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:.9rem;margin:0}
+dl.abk dt{font-weight:700}
+dl.abk dd{margin:0}
+footer{margin-top:26px;font-size:.8rem;color:var(--muted)}
+
+@media (max-width:700px){
+  .ev .m{min-width:0}
+  .mcol .mn{font-size:.55rem}
+  .mcol .cell{font-size:.6rem}
+  .mcol .val{display:none}
+}
+@media print{
+  body{background:#fff}
+  .controls,.toolbar,.no-print{display:none!important}
+  .card,details{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Ablaufplan Vorbereitungsdienst</h1>
+  <p>Studienseminar für das Lehramt an berufsbildenden Schulen Mainz. Zusammengestellt aus den Journalen des Seminars (Orga-Journale Stand 24.04.2026).</p>
+</header>
+
+<section class="card controls">
+  <div class="lbl">1. Mein Ausbildungsweg</div>
+  <div class="chips" id="chips"></div>
+  <div class="row">
+    <div class="field">
+      <div class="lbl">2. Einstellung zum</div>
+      <select id="startMonth"><option value="4">1. Mai</option><option value="10">1. November</option></select>
+      <input id="startYear" type="number" min="2020" max="2040" aria-label="Jahr">
+    </div>
+    <div class="field" id="durField" hidden>
+      <div class="lbl">Dauer</div>
+      <select id="dur"><option value="18">18 Monate</option><option value="24">24 Monate</option></select>
+    </div>
+    <div class="field" id="depField" hidden>
+      <div class="lbl">Volles Deputat (Wochenstunden)</div>
+      <input id="dep" type="number" min="1" max="30" step="1">
+    </div>
+  </div>
+  <div class="hint" id="cfgHint"></div>
+</section>
+
+<section class="card">
+  <h2 id="factsTitle">Steckbrief</h2>
+  <div class="facts" id="facts"></div>
+</section>
+
+<section class="card">
+  <h2>Monatsleiste &amp; Unterrichtsstunden</h2>
+  <div class="hint" style="margin-top:-6px">Balken = eigenverantwortlicher Unterricht pro Woche. Monat anklicken, um die passenden Einträge im Zeitstrahl hervorzuheben.</div>
+  <div class="ribbon" id="ribbon"></div>
+  <div class="legend">
+    <span><i style="background:var(--ep)"></i>Einführungsphase</span>
+    <span><i style="background:var(--hp)"></i>Hauptphase</span>
+    <span><i style="background:var(--pp)"></i>Prüfungsphase (ca.)</span>
+    <span><i class="c"></i>Beratungsgespräch</span>
+    <span><i class="h"></i>Obergrenze statt fester Wert</span>
+  </div>
+  <div class="hours-note" id="hoursNote"></div>
+</section>
+
+<section class="card">
+  <h2>Zeitstrahl</h2>
+  <div class="toolbar">
+    <button class="btn" id="openAll">Alles aufklappen</button>
+    <button class="btn" id="closeAll">Alles zuklappen</button>
+    <button class="btn" id="clearSel" hidden>Monatsauswahl aufheben</button>
+    <button class="btn" onclick="expandAndPrint()">Drucken</button>
+  </div>
+  <div id="timeline"></div>
+</section>
+
+<details class="info">
+  <summary><span class="chev">&#9656;</span> Vergleich aller Ausbildungswege</summary>
+  <div class="in"><div class="tbl-wrap" id="compare"></div>
+  <p class="hint">Veranstaltungszahlen laut Journal Modulsystem (Stand 2013). Maßgeblich ist der aktuelle Professionalisierungsnachweis bzw. Stud.IP.</p></div>
+</details>
+
+<details class="info">
+  <summary><span class="chev">&#9656;</span> Was steht in welchem Journal?</summary>
+  <div class="in"><div class="jgrid" id="journals"></div></div>
+</details>
+
+<details class="info">
+  <summary><span class="chev">&#9656;</span> Abkürzungen</summary>
+  <div class="in"><dl class="abk" id="abk"></dl></div>
+</details>
+
+<footer>
+  Inoffizielle Zusammenfassung zur persönlichen Orientierung. Verbindlich sind die Landesverordnungen, Verwaltungsvorschriften und Vorgaben des Studienseminars. Prüfungstermine legt das Landesprüfungsamt fest. Die Lage der Prüfungsphase in der Monatsleiste ist daher nur ein Richtwert.
+</footer>
+</div>
+
+<script>
+/* ===================== Konfigurationen ===================== */
+const CFG = {
+  vd18:{
+    name:"VD18", long:"Regulärer Vorbereitungsdienst (StRef)", dur:18, durFix:true,
+    recht:"LVO Ausbildung und Zweite Staatsprüfung vom 3. Januar 2012",
+    ae:"86 AE", aeS:"Ausbildungseinheiten (LVO § 10 Abs. 4)",
+    hoursText:"10 Std.", hoursS:"eigenverantwortlich ab Monat 4 (von i. d. R. 12 Std. Ausbildungsunterricht)",
+    ub:"≥ 3 UB je Fach", ubS:"+ mind. 1 UM je Fach, je Fach 1 UB mit Seminarleitung",
+    pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach, 3 mündliche Teilprüfungen à 30 Min.",
+    pgb:null, ubN:3, umN:1, faecher:2,
+    hours:m=> m<=3?{v:0,l:"Hosp."}:{v:10},
+    hoursNote:`<ul><li><b>Monat 1–3:</b> kein eigenverantwortlicher Unterricht. Hospitationen an 3 Tagen pro Woche (Mo, Di, Fr), ab etwa Mitte der Einführungsphase erste Unterrichtsversuche (Werkstattunterricht, Intensivwoche).</li><li><b>Ab Monat 4:</b> Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>10 eigenverantwortlich</b>. Der Rest ist angeleiteter Unterricht oder Hospitation (LVO § 12 Abs. 4).</li><li>Die Stunden sollen sinnvoll auf unterschiedliche Schulformen verteilt werden.</li></ul>`,
+    bp:"46 (15 BV, 11 AV, 4 TOP, 16 SV) + 3–5 ORGA", fd:"40"
+  },
+  vd24:{
+    name:"VD24", long:"Quereinstieg (StRef)", dur:24, durFix:true,
+    recht:"LVO Ausbildung und Zweite Staatsprüfung vom 3. Januar 2012",
+    ae:"86 AE", aeS:"Ausbildungseinheiten (LVO § 10 Abs. 4) + Pädagogische Grundbildung",
+    hoursText:"7 Std.", hoursS:"eigenverantwortlich ab Monat 4 (von i. d. R. 12 Std. Ausbildungsunterricht)",
+    ub:"≥ 5 UB je Fach", ubS:"+ mind. 1 UM je Fach, je Fach 1 UB mit Seminarleitung",
+    pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach, 3 mündliche Teilprüfungen à 30 Min.",
+    pgb:"1–2 der 8 Veranstaltungen", ubN:5, umN:1, faecher:2,
+    hours:m=> m<=3?{v:0,l:"Hosp."}:{v:7},
+    hoursNote:`<ul><li><b>Monat 1–3:</b> kein eigenverantwortlicher Unterricht, Hospitationen an 3 Tagen pro Woche. An max. zwei Freitagnachmittagen Pädagogische Grundbildung im Seminar.</li><li><b>Ab Monat 4:</b> Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>7 eigenverantwortlich</b> (Sonderregel Quereinstieg, LVO § 12 Abs. 4).</li></ul>`,
+    bp:"56 (15 BV, 13 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"44"
+  },
+  lw:{
+    name:"LWRef", long:"Landwirtschaftsreferendariat", dur:24, durFix:false,
+    recht:"LVO Ausbildung und Zweite Staatsprüfung vom 3. Januar 2012 (Journal VD18/VD24/LW)",
+    ae:"86 AE", aeS:"Ausbildungseinheiten (LVO § 10 Abs. 4) + Pädagogische Grundbildung",
+    hoursText:"10 Std.", hoursS:"eigenverantwortlich ab Monat 4 (Regelfall, keine Abweichung im Journal)",
+    ub:"≥ 3 UB je Fach", ubS:"+ mind. 1 UM je Fach, je Fach 1 UB mit Seminarleitung",
+    pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach, 3 mündliche Teilprüfungen à 30 Min.",
+    pgb:"1–2 der 8 Veranstaltungen", ubN:3, umN:1, faecher:2,
+    hours:m=> m<=3?{v:0,l:"Hosp."}:{v:10},
+    hoursNote:`<ul><li><b>Monat 1–3:</b> Hospitationen an 3 Tagen pro Woche. An max. zwei Freitagnachmittagen Pädagogische Grundbildung.</li><li><b>Ab Monat 4:</b> Regelfall nach LVO § 12 Abs. 4: 12 Wochenstunden Ausbildungsunterricht, davon 10 eigenverantwortlich. Für LWRef nennt das Journal keine Abweichung.</li></ul>`,
+    durNote:"Die Gesamtdauer nennt das Journal für LWRef nicht. Bitte oben die passende Dauer wählen.",
+    bp:"54 (15 BV, 11 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"40"
+  },
+  se:{
+    name:"SE", long:"Seiteneinstieg (Lehrkraft)", dur:24, durFix:true,
+    recht:"LehrSeitVO vom 19. April 2023 + VV vom 22. September 2021",
+    ae:"40 AE", aeS:"12 BP + je 10 pro Fach + 8 lehramtsspezifisch (VV Nr. 6)",
+    hoursText:"Freistellung", hoursS:"½ → ⅓ → ¼ des Deputats (VV Nr. 5.2)",
+    ub:"≥ 5 UB je Fach", ubS:"+ mind. 1 UM je Fach, je Fach 1 UB mit Seminarleitung",
+    pr:"2 PU + 3 mündl.", prS:"je 1 Prüfungsunterricht pro Fach (versch. Schulstufen), 3 mündliche Teilprüfungen",
+    pgb:"2 der 8 Veranstaltungen", ubN:5, umN:1, faecher:2,
+    hours:(m,dep)=>{
+      if(m<=3) return {v:0,l:"Intens."};
+      if(m<=6) return {v:dep/2};
+      if(m<=12) return {v:dep*2/3};
+      return {v:dep*3/4};
+    },
+    hoursNote:dep=>`<ul><li><b>Monat 1–3: Intensivausbildung</b> (VV Nr. 5.1). Wochenplan wie in der Einführungsphase: Hospitationen, Seminartage Mi/Do, Freitagnachmittag Pädagogische Grundbildung.</li><li><b>Monat 4–6:</b> Freistellung von <b>der Hälfte</b> der Unterrichtsverpflichtung, also ${fmt(dep/2)} Std. Unterricht.</li><li><b>Monat 7–12 (2. Halbjahr):</b> Freistellung von <b>einem Drittel</b>, also ${fmt(dep*2/3)} Std. Unterricht.</li><li><b>Monat 13–24 (2. Ausbildungsjahr):</b> Freistellung von <b>einem Viertel</b>, also ${fmt(dep*3/4)} Std. Unterricht.</li><li>Die Werte sind mit einem vollen Deputat von ${fmt(dep)} Std. gerechnet. Oben lässt sich das Deputat anpassen.</li></ul>`,
+    bp:"56 (15 BV, 13 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"44"
+  },
+  fl:{
+    name:"FL", long:"Fachlehrerin / Fachlehrer", dur:24, durFix:false,
+    recht:"LVO päd. Ausbildung FL/LfFP vom 16. September 2013 + VV vom 21. Oktober 2013",
+    ae:"61 AE", aeS:"25 BP + 20 FD + 16 lehramtsspezifisch (VV Nr. 6.1)",
+    hoursText:"≤ 12 Std.", hoursS:"selbstständig, Ausbildungsunterricht insgesamt ≤ 20 Std. (VV Nr. 7.3)",
+    ub:"≥ 3 UB", ubS:"+ mind. 4 UM, 1 UB mit Seminarleitung",
+    pr:"2 PU + 2 mündl.", prS:"2 Prüfungsunterrichte in 2 Schulformen am selben Tag; Präsentation (30 Min.) + BP (30 Min.)",
+    pgb:"4 der 8 Veranstaltungen", ubN:3, umN:4, faecher:1,
+    hours:m=> m<=3?{v:0,l:"Hosp."}:{v:12,cap:true},
+    hoursNote:`<ul><li><b>Monat 1–3:</b> Einführungsphase mit Hospitationen an 3 Tagen pro Woche. Freitags auch Pädagogische Grundbildung (4 der 8 Veranstaltungen).</li><li><b>Danach:</b> Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b>. Zusätzlich kann die (teilweise) Übernahme einzelner Stunden dazukommen (VV Nr. 7.3).</li><li>Ab wann genau die Stunden gelten, legt das Journal nicht fest. Die Balken zeigen deshalb die Obergrenze ab Monat 4.</li></ul>`,
+    durNote:"Die Gesamtdauer nennt das Journal nicht. Dargestellt sind standardmäßig 24 Monate; bei Bedarf oben anpassen.",
+    bp:"49 (15 BV, 6 AV, 4 TOP, 8 PGB, 16 SV) + 3–5 ORGA", fd:"30"
+  },
+  lffp:{
+    name:"LfFP", long:"Lehrkraft für Fachpraxis", dur:24, durFix:false,
+    recht:"LVO päd. Ausbildung FL/LfFP vom 16. September 2013 + VV vom 21. Oktober 2013",
+    ae:"53 AE", aeS:"20 BP + 25 FD + 8 lehramtsspezifisch (VV Nr. 6.1)",
+    hoursText:"≤ 12 Std.", hoursS:"selbstständig, Ausbildungsunterricht insgesamt ≤ 20 Std. (VV Nr. 7.3)",
+    ub:"≥ 3 UB", ubS:"+ 2 UM, 1 UB mit Seminarleitung",
+    pr:"1 PU + 2 mündl.", prS:"1 Prüfungsunterricht; Präsentation (30 Min.) + BP (20 Min.)",
+    pgb:"4 der 8 Veranstaltungen", ubN:3, umN:2, faecher:1,
+    hours:m=> m<=3?{v:0,l:"Hosp."}:{v:12,cap:true},
+    hoursNote:`<ul><li><b>Monat 1–3:</b> Einführungsphase mit Hospitationen an 3 Tagen pro Woche. Freitags auch Pädagogische Grundbildung (4 der 8 Veranstaltungen).</li><li><b>Danach:</b> Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b> (VV Nr. 7.3).</li><li>Ab wann genau die Stunden gelten, legt das Journal nicht fest. Die Balken zeigen deshalb die Obergrenze ab Monat 4.</li></ul>`,
+    durNote:"Die Gesamtdauer nennt das Journal nicht. Dargestellt sind standardmäßig 24 Monate; bei Bedarf oben anpassen.",
+    bp:"36 (15 BV, 1 AV, 4 TOP, 8 PGB, 8 SV) + 3–5 ORGA", fd:"25"
+  }
+};
+const ORDER=["vd18","vd24","lw","se","fl","lffp"];
+const isVD = c => ["vd18","vd24","lw","se"].includes(c);
+const isFL = c => ["fl","lffp"].includes(c);
+
+/* ===================== Zustand ===================== */
+const LS="ablaufplan_vd_v1";
+let st = Object.assign({cfg:"vd18", sm:10, sy:2026, dep:24, dur:{lw:24,fl:24,lffp:24}, sel:null}, JSON.parse(localStorage.getItem(LS)||"{}"));
+st.sel=null;
+const save=()=>localStorage.setItem(LS,JSON.stringify({cfg:st.cfg,sm:st.sm,sy:st.sy,dep:st.dep,dur:st.dur}));
+
+const MN=["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
+function fmt(x){return (Math.round(x*10)/10).toString().replace(".",",")}
+function mDate(n){const t=st.sm+(n-1);return MN[((t%12)+12)%12]+" "+String(st.sy+Math.floor(t/12)).slice(-2)}
+function mDateLong(n){const t=st.sm+(n-1);return MN[((t%12)+12)%12]+" "+(st.sy+Math.floor(t/12))}
+function dur(){const c=CFG[st.cfg];return c.durFix?c.dur:(st.dur[st.cfg]||c.dur)}
+function phaseOf(n){const D=dur();return n<=3?"ep":(n>D-3?"pp":"hp")}
+
+/* ===================== Einträge ===================== */
+/* m:[von,bis] in Monaten; Funktionen erhalten (cfgKey, cfg, D) */
+const EV = [
+ /* ---------- Einführungsphase ---------- */
+ {ph:"ep",m:[1,1],cat:"seminar",t:"Dienstbeginn & Organisationsveranstaltungen",tag:"Start",
+  d:(k,c)=>`<ul><li>Einstellung zum <b>1. Mai</b> oder <b>1. November</b>. Die Einführungsphase dauert <b>3 Monate</b>.</li><li>Betreuung der Stammgruppe durch die Fachleitungen Berufspraxis (BP). Die Stammgruppe bleibt über die ganze Ausbildung im BP-Seminar zusammen.</li><li>Zugänge einrichten: <b>Xi (K-Reflekt)</b> für Beratungen/UB-Unterlagen, <b>Stud.IP</b> für Veranstaltungen, Moodle.</li><li>Den schulischen Hospitationsplan früh im Seminarbüro einreichen.</li></ul>`},
+ {ph:"ep",m:[1,3],cat:"seminar",t:"Wochenplan der Einführungsphase",tag:"Woche",
+  d:(k,c)=>`<table><tr><th>Tag</th><th>Ort</th><th>Inhalt</th></tr>
+  <tr><td>Montag</td><td>Ausbildungsschule</td><td>Hospitationen, schulorganisatorische Abläufe, Schulrecht</td></tr>
+  <tr><td>Dienstag</td><td>Ausbildungsschule / Schulen der Fachleitungen</td><td>Vom Seminar organisiert: Hospitationen bei Fachleitungen, Modellschulen, Kooperationspartner, Workshop Unterrichtsplanung</td></tr>
+  <tr><td>Mittwoch</td><td>Seminar</td><td>Ausbildungsveranstaltungen 8:45–11:45 und 13:15–16:15 (mind. 90 Min. Präsenz)</td></tr>
+  <tr><td>Donnerstag</td><td>Seminar</td><td>wie Mittwoch</td></tr>
+  <tr><td>Freitag</td><td>Ausbildungsschule</td><td>Hospitationen, Schulorganisation, Schulrecht${c.pgb?`<br><b>Nachmittags: Pädagogische Grundbildung im Seminar</b> (${c.pgb} in der Einführungsphase)`:""}</td></tr></table>`},
+ {ph:"ep",m:[1,3],cat:"seminar",t:"Veranstaltungen der Einführungsphase",tag:"Pflicht",
+  d:(k,c)=>`<ul><li>Organisationsveranstaltungen</li><li><b>15 Basisveranstaltungen</b> (inkl. 1 Rechtsveranstaltung und 2 Planungsworkshops Lehrplan)</li><li>1 fachdidaktische Basisveranstaltung (BV FD) und 1 fachdidaktisch-übergreifende (BV FDÜ) ${c.faecher===2?"<b>pro Fach</b>":""}</li><li><b>4 Veranstaltungen Inklusion / Berufsförderpädagogik</b> (u. a. Lebenswelt der Lernenden, rechtliche Grundlagen &amp; Heterogenität)</li><li>Mentoriatstag (Orientierung für die schulische Vertretung)</li><li>Beratungsgespräch zum Digitalen Notizbuch</li><li>Erlebnispädagogischer Tag</li><li>Planung und Organisation eines Seminarfestes</li>${c.pgb?`<li>Pädagogische Grundbildung: ${c.pgb} finden in der Einführungsphase statt (Freitagnachmittag)</li>`:""}</ul>`},
+ {ph:"ep",m:[1,3],cat:"unterricht",t:"Hospitationen (3 Tage pro Woche)",tag:"Schule",
+  d:()=>`<ul><li>Teilnehmende Beobachtung bei erfahrenen Lehrkräften: Mo/Fr organisiert die Schule, dienstags das Seminar (Hospitationsplan).</li><li>Fachspezifische Hospitationen bei den eigenen Fachleitungen, i. d. R. <b>mind. 2× pro Fach</b> in den ersten drei Monaten, dienstags.</li><li>Mit der Fachleitung vorab <b>Beobachtungsaufträge</b> vereinbaren (Kriterien + Indikatoren), z. B. Interaktion, Impulse, Sozialformen.</li><li>Mitschrift: Wahrnehmungen strikt von Interpretationen trennen. In der Nachbesprechung 2–3 Aspekte nach Feedback-Regeln einbringen.</li><li>Erkenntnisse ggf. im Digitalen Notizbuch festhalten.</li></ul>`},
+ {ph:"ep",m:[1,3],cat:"notiz",t:"Digitales Notizbuch anlegen",tag:"Reflexion",
+  d:()=>`<ul><li>Format: <b>OneNote, Padlet/Taskcard oder Moodle</b>, passwortgeschützt. Umfang max. ca. <b>30 DIN-A4-Seiten</b>.</li><li>Gliederung nach den <b>5 Modulen</b> und den Kompetenzen des <b>Kompetenzrasters</b>.</li><li>Verbindlich: Belege zu den Schwerpunktkriterien aus den Beratungen, Konsequenzen nach UM/UB, Reflexion der Didaktischen Abschnittsplanungen (M4) mit passenden Leistungsfeststellungen (M5), Reflexion schulischer Erfahrungen.</li><li><b>Nicht hinein:</b> UB-Entwürfe, Klassenanalysen, Abschnittsplanungen (die gehen in Xi), Veranstaltungsunterlagen.</li><li>Wird über die gesamte Ausbildung „en passant“ geführt, kurz und stichpunktartig („Ein Mehr an Einsichten statt ein Meer an Text“).</li></ul>`},
+ {ph:"ep",m:[2,3],cat:"unterricht",t:"Werkstattunterricht & Intensivwoche",tag:"erster Unterricht",
+  d:(k)=>`<ul><li>Ab etwa der Hälfte der Einführungsphase liegt der Schwerpunkt auf der <b>Vorbereitung des eigenverantwortlichen Unterrichts</b> (Werkstattunterricht).</li><li><b>Intensivwoche:</b> erste Erfahrung mit Unterrichtsplanung und -umsetzung (TOP-Prinzip: im Seminar planen, an einer Schule umsetzen, gemeinsam reflektieren).${isFL(k)?" Sie gehört zur Schulpraxis, inkl. Betriebsbesichtigung bei Lernortkooperationspartnern.":""}</li><li>Die Einführungsphase endet mit einer gemeinsamen Evaluation der Gruppe.</li></ul>`},
+ {ph:"ep",m:[3,3],cat:"gespraech",t:"Entwicklungsgespräch / Vierteljahresgespräch",tag:"Beratung",mark:true,
+  d:()=>`<ul><li>Zum Abschluss der Einführungsphase: beratendes Gespräch mit der <b>Fachleitung Berufspraxis</b>.</li><li>Vorbereitung in <b>Xi</b>: Termin anlegen, alle Beteiligten einladen (Seminarleitung BP, Fachleitungen, Schulleitung, Mentoriat). Eingeladene können nicht wieder entfernt werden.</li><li><b>Mind. 3 Ziele</b> zu 3 unterschiedlichen Kriterien des Kompetenzrasters formulieren, Selbsteinschätzung auf Stufe <b>A</b> (Mindest-), <b>B</b> (Regel-) oder <b>C</b> (Exzellenzstandard), mit Bezug zum Notizbuch.</li><li>Ziele so wählen, dass sie in 3 Monaten bis zum Halbjahresgespräch erreichbar sind (Ziel → Handlungsoptionen → Zielerreichung/Beleg).</li><li><b>Frist:</b> Das Feld „Selbsteinschätzung“ ist <b>1 Woche vor dem Termin</b> (00:00 Uhr) gesperrt. Das Notizbuch wird 1 Woche vorher für die Ausbildenden geöffnet.</li></ul>`},
+
+ /* ---------- Hauptphase ---------- */
+ {ph:"hp",m:[4,4],cat:"unterricht",t:"Eigenverantwortlicher Unterricht beginnt",tag:"Stunden",mark:false,
+  d:(k,c)=>{
+    if(k==="se") return `<ul><li>Ende der Intensivausbildung. Ab Monat 4 gilt die Freistellung von <b>der Hälfte</b> der wöchentlichen Unterrichtsverpflichtung (bei ${fmt(st.dep)} Std. Deputat: <b>${fmt(st.dep/2)} Std. Unterricht</b>).</li><li>Ab Monat 7: Freistellung ⅓ (${fmt(st.dep*2/3)} Std.), ab Monat 13: Freistellung ¼ (${fmt(st.dep*3/4)} Std.).</li></ul>`;
+    if(isFL(k)) return `<ul><li>Ausbildungsunterricht <b>höchstens 20 Wochenstunden</b>, davon <b>selbstständig höchstens 12</b>. Daneben ist die (teilweise) Übernahme einzelner Stunden möglich.</li><li>Unterricht in den vom Ausbildungsfach abgedeckten Fächern, ggf. in unterschiedlichen Schulformen und -stufen.</li></ul>`;
+    return `<ul><li>Ausbildungsunterricht i. d. R. <b>12 Wochenstunden</b>, davon <b>${k==="vd24"?7:10} eigenverantwortlich</b>${k==="vd24"?" (Quereinstieg)":""}.</li><li>Eine sinnvolle Verteilung auf unterschiedliche Schulformen ist anzustreben.</li></ul>`;
+  }},
+ {ph:"hp",m:[4,"D-3"],cat:"seminar",t:"Modularisierte Veranstaltungen über Stud.IP",tag:"laufend",
+  d:(k,c)=>`<ul><li>Veranstaltungspläne pro Schulhalbjahr in <b>Stud.IP</b>. Alle Pflichtveranstaltungen belegen, Wahlpflicht nach eigenem Professionalisierungsplan (z. B. Ziele aus Beratungsgesprächen).</li><li>Arten: <b>AV</b> Aufbau (Wahlpflicht), <b>TOP</b> Theorie-Praxis (Pflicht, planen–umsetzen–reflektieren in Kleingruppe), <b>SV</b> Sonderveranstaltungen, <b>ORGA</b>; fachdidaktisch: <b>FD</b> (Pflicht), <b>FDÜ</b> (Wahlpflicht), <b>Planungsworkshops</b> zu KMK-Rahmenlehrplänen.</li><li>Anmeldungen sind verbindlich. Begründete Abmeldung bis <b>1 Woche vorher</b>.</li><li>Möglichst gleichmäßig über die Ausbildung verteilen. Nachweis im <b>Professionalisierungsnachweis</b>.</li><li>Mindestumfang (Journal Modulsystem): BP ${c.bp}; Fachdidaktik ${c.fd}.</li><li>Eigene Ressourcen können eingebracht werden (z. B. eine AV/FDÜ mitgestalten). Das ist beurteilungsrelevant.</li></ul>`},
+ {ph:"hp",m:[4,"D-3"],cat:"unterricht",t:"Unterrichtsmitschauen (UM) & Unterrichtsbesuche (UB)",tag:"laufend",
+  d:(k,c)=>`<ul><li><b>Umfang:</b> ${isFL(k)?`mind. <b>${c.umN} UM</b> und mind. <b>${c.ubN} UB</b>`:`mind. <b>${c.umN} UM</b> und mind. <b>${c.ubN} UB je Fach</b> (bei 2 Fächern also ≥ ${c.ubN*2} UB)`}. Mind. 1 UB${c.faecher===2?" je Fach":""} findet mit Seminarleitung statt. UBs sollen in unterschiedlichen Schulformen liegen.</li><li><b>Termin:</b> mind. <b>3 Wochen vorher</b> selbst vereinbaren und in die Kalender aller Beteiligten eintragen. Zwischen zwei Terminen mind. <b>2 Wochen</b> Abstand.</li><li><b>Ablauf:</b> ab der 2. Stunde, Besuch einheitlich <b>45 Min.</b> (bei 90-Min.-Planung nur der 2. Teil). Danach Besprechung mit allen Gästen. Raum vorher reservieren, keine anderen Verpflichtungen.</li><li><b>Entwurf:</b> 5–7 Seiten ohne Anhang, <b>48 Std. vorher in Xi</b>. Bei Montagsterminen bis Freitag 14:00 Uhr. Unterrichtsort (Schule + Raum) aufs Deckblatt.</li><li>Gezeigt wird eine Lernsituation mit mind. 1 Lernaufgabe, eingebettet in die didaktische Abschnittsplanung.</li><li><b>Danach:</b> Die Fachleitung lädt die Niederschrift in Xi hoch. Daraus Konsequenzen im Notizbuch formulieren. Das unterschriebene Deckblatt im Seminarsekretariat abgeben.</li><li>Schulleitung einladen bzw. immer über Besuch informieren. Mitglieder der Ausbildungsgruppe einzuladen wird ausdrücklich empfohlen.</li></ul>`},
+ {ph:"hp",m:[4,"D-3"],cat:"unterricht",t:"Erweiterte Hospitationen",tag:"laufend",
+  d:()=>`<ul><li>Neben Unterricht auch Einblicke in Fach-, Bildungsgang- und Klassenteamkonferenzen, Arbeitskreise, Beratungsgespräche und Lernortkooperationen.</li></ul>`},
+ {ph:"hp",m:[4,"D-3"],cat:"seminar",t:"Inklusion / Lernbegleitung",tag:"Pflicht + Wahl",
+  d:()=>`<ul><li><b>Pflicht in der Hauptphase:</b> 3./4. Konzept des inklusiven BVJ inkl. kriteriengeleiteter Hospitation in BVJ-I-Klassen · 5. Diagnostik, Beratung &amp; Förderung · 6. Umgang mit herausfordernden Verhaltensweisen.</li><li><b>Wahl:</b> TOP 1–3 Lernbegleitung (eigener Unterricht in einer BVJ- oder BF1-Kleingruppe).</li><li>Für alle 6 Pflichtveranstaltungen + 3 TOP gibt es ein <b>Zertifikat</b>.</li></ul>`},
+ {ph:"hp",m:[4,"D-3"],cat:"notiz",t:"Sonderveranstaltungen „Reflexives Arbeiten mit dem Digitalen Notizbuch“",tag:"2× pro Stammgruppe",
+  d:()=>`<ul><li>Zwei Sonderveranstaltungen je Stammgruppe, zusätzlich AV-Angebote zum reflexiven Arbeiten.</li><li>Ansprechpartner bei Fragen: die Fachleitung Berufspraxis.</li></ul>`},
+ {ph:"hp",m:[6,6],cat:"gespraech",t:"Halbjahresgespräch",tag:"Beratung",mark:true,
+  d:(k)=>`<ul><li>${isVD(k)&&k!=="se"?"Gegen Ende des 1. Ausbildungshalbjahres führt jede Fachleitung ein ausführliches Beratungsgespräch über den Ausbildungsstand (LVO § 13 Abs. 4).":"Beratungsgespräch über den Ausbildungsstand mit den Fachleitungen."}</li><li>Die Ziele aus dem Vierteljahresgespräch werden aufgegriffen und die Entwicklung besprochen.</li><li><b>Zusätzlich verpflichtend</b> in Xi und im Notizbuch: Selbsteinschätzung zu <b>M4 K1.1</b> (Setzung von Schwerpunkten) und <b>M4 K1.2</b> (Konkretisierung und Sequenzierung von Lernsituationen/-aufgaben). Damit gibt es 5 Beratungspunkte.</li><li>Ergebnis: neue Ziele für das nächste halbe Jahr unter „Ziele und Konsequenzen“ in Xi.</li><li>Fristen wie immer: Selbsteinschätzung 1 Woche vorher gesperrt, Notizbuch 1 Woche vorher öffnen.</li></ul>`},
+ {ph:"hp",m:[7,"min(D-3,12)"],cat:"gespraech",t:"Beratungsgespräch mit der Schule",tag:"2. Halbjahr",
+  d:(k)=>`<ul><li>Im Laufe des <b>2. Ausbildungshalbjahres</b> führt die Schulleitung oder die mit der Ausbildung beauftragte Person (Mentorat) ein Beratungsgespräch. Darüber wird eine Niederschrift für die Ausbildungsakte angefertigt (LVO § 13 Abs. 5).</li><li>Kann mit dem Halbjahres- oder Jahresgespräch der Fachleitungen zusammengelegt werden.</li></ul>`, only:["vd18","vd24","lw"]},
+ {ph:"hp",m:[7,"D-3"],cat:"pruefung",t:"Unterrichtsvorhaben für die Präsentationsprüfung",tag:"Vorbereitung",
+  d:()=>`<ul><li><b>Frühestens nach dem Halbjahresgespräch</b>: Thema und Lerngruppe mit Mentor/in absprechen, dann mit der Fachleitung abstimmen.</li><li>Umfang <b>6–8 Stunden</b>, i. d. R. in eigenen Klassen im regulären Unterricht. Termine in den Seminarkalender eintragen. Die Fachleitung muss mind. einen Termin besuchen können.</li><li><b>Literaturliste</b> (fachdidaktisch) <b>1 Woche vor Beginn der Reihe</b> an die Fachleitung.</li><li>Für den Besuchstermin <b>48 Std. vorher per Mail</b>: detaillierte DAP mit Kompetenzformulierung je Stunde, ausführliche Lerngruppenanalyse mit Bezug zum Vorhaben, Verlaufsplan. Keine Ausarbeitung und keine Besprechung.</li><li>Fragestellung schon während der Reihe klären und Diagnoseinstrumente einplanen (Beobachtungskriterien, Fragebögen vorher/nachher, Handlungsprodukte, Video).</li><li>Alle eingesetzten Materialien und Schülerprodukte gehen an die Fachleitung.</li><li><b>DAP-Tabelle</b> mit Spalte „Beobachtungen und Reflexionen“ spätestens <b>4 Wochen nach Ende der Reihe</b> in Xi hochladen.</li><li>Das Vorhaben muss spätestens 1 Tag vor dem Prüfungstag abgeschlossen sein.</li></ul>`},
+ {ph:"hp",m:[12,12],cat:"gespraech",t:"Jahresgespräch",tag:"Beratung",mark:true,
+  d:(k)=>`<ul><li>${isVD(k)&&k!=="se"?"Gegen Ende des 1. Ausbildungsjahres: ausführliches Beratungsgespräch jeder Fachleitung (LVO § 13 Abs. 4).":"Beratungsgespräch über den Ausbildungsstand nach einem Jahr."}</li><li>Grundlage: <b>3 Ziele</b> aus dem Halbjahresgespräch, dazu weiterhin <b>M4 K1.1</b> und <b>M4 K1.2</b>, neu <b>M5 K4</b> (Nutzung der Vielfalt von Beurteilungssystemen).</li><li>Dafür im Notizbuch einige eigene Leistungsfeststellungen mit Auswertung und Einschätzung belegen.</li></ul>`},
+ {ph:"hp",m:[4,"D"],cat:"seminar",t:"Projekttage am Seminar",tag:"einmal",
+  d:()=>`<ul><li>Alle nehmen <b>einmal</b> teil (auch Gruppen kurz vor den Vornoten).</li><li>Projektidee mit Bezug zum Kompetenzraster nach Aufforderung einreichen und dabei eine Projektleitung vorschlagen. Gruppen mit 3–6 Personen, ausbildungsgruppenübergreifend.</li><li>Kick-off am 1. Tag um 8:45 Uhr im Seminar, Tagesabschlussreflexion 15:45 Uhr mit BP-Fachleitung. Am Präsentationstag mind. 3 weitere Präsentationen ansehen und Rückmeldung geben.</li><li>Anrechnung: <b>3 Sonderveranstaltungen</b>. Die Projektleitung kann sich zusätzlich 1 AV anrechnen lassen.</li></ul>`},
+
+ /* ---------- Prüfungsphase ---------- */
+ {ph:"pp",m:["D-2","D-1"],cat:"pruefung",t:"Prüfungsklassen festlegen & DAP vorlegen",tag:"rechtzeitig",
+  d:(k)=>`<ul><li><b>Schritt 1:</b> Mit Mentor/in und Schulleitung mögliche Prüfungsklassen besprechen. ${k==="lffp"?"Vorschlag zur Schulform an die Seminarleitung.":k==="fl"?"Die 2 Prüfungsunterrichte finden in <b>2 unterschiedlichen Schulformen</b> statt. Themenbereiche schlägst du der Seminarleitung vor.":"Prüfungsunterricht i. d. R. in <b>unterschiedlichen Schulformen</b>"+(k==="se"?" bzw. Schulstufen":"")+"."} Ferien beachten.</li><li><b>Schritt 2:</b> Schulleitung und Seminar legen die Klassen gemeinsam fest. Wünsche werden nach Möglichkeit berücksichtigt.</li><li><b>Schritt 3:</b> Der Fachleitung rechtzeitig eine <b>Didaktische Abschnittsplanung</b> für den Prüfungsunterricht vorlegen.</li><li>Räume für Prüfung und Besprechung mit der Schule organisieren.</li></ul>`},
+ {ph:"pp",m:["D-2","D"],cat:"gespraech",t:"Abschließende Beurteilungen & Vornote",tag:"Ende",
+  d:()=>`<ul><li>Am Ende der Ausbildungszeit erstellen Fachleitungen, Seminarleitung und Schulleitung (im Benehmen mit dem Mentorat) jeweils eine Beurteilung.</li><li>Die Reflexionsfähigkeit fließt über die Beiträge im Digitalen Notizbuch in die Vornote ein. Das Notizbuch wird dafür 1 Woche vorher geöffnet.</li></ul>`},
+ {ph:"pp",m:["D-1","D"],cat:"frist",t:"Ab 4 Wochen vor der Prüfung: keine Veranstaltungen mehr",tag:"Frist",
+  d:()=>`<ul><li>In der Prüfungsphase, spätestens 4 Wochen vor dem Prüfungstermin, werden i. d. R. keine Seminarveranstaltungen mehr besucht.</li></ul>`},
+ {ph:"pp",m:["D-1","D"],cat:"frist",t:"Fristen Prüfungsunterricht (Werktage ohne Samstag)",tag:"Countdown",
+  d:(k)=>{
+    const same = k==="fl" || (k!=="lffp");
+    return `<table><tr><th>Wann</th><th>Was</th></tr>
+    <tr><td>rechtzeitig, spätestens 15 WT vorher</td><td>Die Fachleitung legt das Thema (mit Schwerpunkt) fest und trägt es in Xi ein.</td></tr>
+    ${k==="lffp"
+      ? `<tr><td><b>5 WT vorher</b></td><td>Thema wird bekannt gegeben.</td></tr>`
+      : k==="fl"
+      ? `<tr><td><b>10 WT vorher</b></td><td>Beide Themen (2 Schulformen, selber Tag) werden bekannt gegeben.</td></tr>`
+      : `<tr><td><b>10 WT vorher</b></td><td>Beide Themen kommen per Xi, wenn beide PU am selben Tag sind. Erhalt <b>am selben Tag in Xi bestätigen</b>. (Bei getrennten Tagen: 5 WT vor dem jeweiligen PU.)</td></tr>`}
+    <tr><td><b>1 WT vorher, vormittags</b></td><td>Entwurf ${isFL(k)?"in <b>5-facher</b> Ausfertigung":"in einfacher Ausfertigung pro Kommissionsmitglied"} im <b>Sekretariat der Ausbildungsschule</b> abgeben und zusätzlich per dienstlicher Mail an die Kommission schicken und in Xi hochladen.</td></tr>
+    <tr><td><b>Prüfungstag</b></td><td>PU i. d. R. in der 2. und 4. Stunde, danach Anhörung. Die Note wird mit Begründung am selben Tag bekannt gegeben.</td></tr></table>`;
+  }},
+ {ph:"pp",m:["D-1","D"],cat:"frist",t:"Fristen Präsentationsprüfung",tag:"Countdown",
+  d:(k)=>`<table><tr><th>Wann</th><th>Was</th></tr>
+  <tr><td>zum festgelegten Termin</td><td>Fachdidaktisches Thema als <b>Frage</b> formulieren und mit der Fachleitung abstimmen.</td></tr>
+  <tr><td>spätestens <b>2 Wochen vorher</b></td><td>Abgestimmten Themenvorschlag digital in Xi bei der Seminarleitung einreichen. Die Seminarleitung setzt das Thema fest.</td></tr>
+  <tr><td><b>${isFL(k)?"20":"5"} WT vorher</b></td><td>Thema kommt per Xi-Mail. Erhalt bis spätestens <b>14:00 Uhr</b> über den Link bestätigen.</td></tr>
+  <tr><td>Prüfungstag</td><td>Tischvorlage (Ausdruck der Präsentation oder 1-seitiges Abstract) in <b>2-facher</b> Ausfertigung mitbringen.</td></tr></table>`},
+ {ph:"pp",m:["D","D"],cat:"pruefung",t:"Praktische Prüfung (Prüfungsunterricht)",tag:"Prüfung",mark:true,
+  d:(k)=>`<ul>${k==="lffp"?"<li><b>1 Prüfungsunterricht</b>.</li>":k==="fl"?"<li><b>2 Prüfungsunterrichte</b> in zwei unterschiedlichen Schulformen <b>am selben Tag</b>.</li>":"<li><b>Je 1 Prüfungsunterricht pro Ausbildungsfach</b>, i. d. R. in bekannten Klassen.</li>"}
+  <li>Kommission mit 4 Personen: Vertretung Landesprüfungsamt/Schulbehörde, Seminarleitung oder BP-Fachleitung, die Fachleitung des Fachs, Schulvertretung (z. B. Mentor/in).</li><li>Grundlage der Bewertung: curriculare Standards bzw. Kompetenzraster.</li>
+  <li><b>Nicht bestanden</b>, wenn ${k==="lffp"?"der PU „mangelhaft“ oder „ungenügend“ ist":"beide PU „mangelhaft“ oder einer „ungenügend“ ist"}.</li><li>Dienstlich interessierte Personen (z. B. Mentor/in) dürfen nur mit Zustimmung dabei sein und können abgelehnt werden.</li></ul>`},
+ {ph:"pp",m:["D","D"],cat:"pruefung",t:"Mündliche Prüfung",tag:"Prüfung",mark:true,
+  d:(k)=>`<ul>${isFL(k)
+   ? `<li><b>2 Teilprüfungen:</b> 1. Präsentation eines eigenen Unterrichtsvorhabens (10 Min. Vortrag + 20 Min. Kolloquium) · 2. Bildungswissenschaften in der Praxis + Schul- und Beamtenrecht (<b>${k==="fl"?"30":"20"} Min.</b>).</li><li>Nicht bestanden, wenn eine Teilprüfung „ungenügend“ ist.</li>`
+   : `<li><b>3 Teilprüfungen à ca. 30 Min. am selben Tag im Seminar</b>: 1. Präsentationsprüfung in einem Fach (10 Min. Vortrag in freier Rede + 20 Min. Kolloquium) · 2. Didaktik/Methodik des <b>anderen</b> Fachs (ohne Präsentation) · 3. BP: Bildungswissenschaften in der Praxis + Schul- und Beamtenrecht.</li><li>Die Reihenfolge legt die Seminarleitung fest.</li><li>Vorher ist ein Beratungsgespräch zur Themenfindung mit der jeweiligen Fachleitung möglich. Die Themen sollen sich klar vom BP und von früheren Leistungen unterscheiden. Eigene Arbeitsblätter oder Schülerprodukte können Gesprächsanlass sein.</li><li>Nicht bestanden, wenn eine Teilprüfung „ungenügend“ oder alle drei „mangelhaft“ sind.</li>`}
+   <li><b>Erwartungshorizont Präsentation:</b> Fragestellung erläutern → kurzer Überblick über die Reihe (1–2 Min.) → didaktische Entscheidungen mit Literatur → ausführliche Reflexion → Antwort auf die Frage.</li></ul>`}
+];
+
+function resolve(x,D){
+  if(typeof x==="number") return x;
+  return Function("D","min","return "+x.replace(/min\(/g,"Math.min("))(D);
+}
+
+/* ===================== Rendering ===================== */
+const $=s=>document.querySelector(s);
+
+function renderChips(){
+  $("#chips").innerHTML = ORDER.map(k=>`<button class="chip" aria-pressed="${k===st.cfg}" data-k="${k}"><b>${CFG[k].name}</b> · ${CFG[k].long}</button>`).join("");
+  document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{st.cfg=b.dataset.k;st.sel=null;save();render()});
+}
+
+function renderControls(){
+  const c=CFG[st.cfg];
+  $("#startMonth").value=st.sm; $("#startYear").value=st.sy;
+  $("#durField").hidden=c.durFix; $("#dur").value=dur();
+  $("#depField").hidden= st.cfg!=="se"; $("#dep").value=st.dep;
+  const D=dur();
+  let h=`<b>${c.name}</b>: ${c.long}. Rechtsgrundlage: ${c.recht}. Ausbildung von <b>${mDateLong(1)}</b> bis voraussichtlich <b>${mDateLong(D)}</b> (${D} Monate).`;
+  $("#cfgHint").innerHTML=h + (c.durNote?`<div class="hint warn">${c.durNote}</div>`:"");
+}
+
+function renderFacts(){
+  const c=CFG[st.cfg], D=dur();
+  $("#factsTitle").textContent=`Steckbrief ${c.name}`;
+  const f=[
+    ["Dauer",D+" Monate", c.durFix?"Einführungsphase: Monat 1–3":"Dauer nicht im Journal genannt"],
+    ["Seminar-Ausbildung",c.ae,c.aeS],
+    ["Unterricht",c.hoursText,c.hoursS],
+    ["Besuche",c.ub,c.ubS],
+    ["Prüfung",c.pr,c.prS],
+    ["Päd. Grundbildung",c.pgb?"8 Veranst.":"–",c.pgb?c.pgb+" in der Einführungsphase (Fr-Nachmittag)":"für VD18 nicht verpflichtend"]
+  ];
+  $("#facts").innerHTML=f.map(([k,v,s])=>`<div class="fact"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+
+function renderRibbon(){
+  const c=CFG[st.cfg], D=dur();
+  const vals=[]; for(let m=1;m<=D;m++) vals.push(c.hours(m,st.dep));
+  const max=Math.max(1,...vals.map(v=>v.v));
+  const marks={3:1,6:1,12:1};
+  const r=$("#ribbon"); r.style.gridTemplateColumns=`repeat(${D},1fr)`;
+  r.innerHTML=vals.map((v,i)=>{
+    const m=i+1, ph=phaseOf(m), h=Math.round(v.v/max*96);
+    const bar = v.v>0 ? `<div class="bar ${v.cap?"cap":""}" style="height:${h}px"></div><span class="val" style="--h:${h}px">${v.cap?"≤":""}${fmt(v.v)}</span>` : `<div class="bar zero"></div><span class="val" style="--h:3px">${v.l||""}</span>`;
+    return `<div class="mcol ${st.sel===m?"sel":""}" data-m="${m}" title="Monat ${m} · ${mDateLong(m)}">
+      <div class="bar-area">${bar}</div>
+      <div class="cell ${ph}">${m}${(marks[m]&&m<=D)?'<span class="dot"></span>':""}</div>
+      <div class="mn">${mDate(m)}</div></div>`;
+  }).join("");
+  r.querySelectorAll(".mcol").forEach(el=>el.onclick=()=>{const m=+el.dataset.m;st.sel= st.sel===m?null:m;renderRibbon();applySel(true)});
+  $("#hoursNote").innerHTML = typeof c.hoursNote==="function"? c.hoursNote(st.dep) : c.hoursNote;
+}
+
+function rangeLabel(a,b){
+  if(a===b) return `Monat ${a} · ${mDate(a)}`;
+  return `Monat ${a}–${b} · ${mDate(a)} – ${mDate(b)}`;
+}
+
+function renderTimeline(){
+  const k=st.cfg, c=CFG[k], D=dur();
+  const phases=[
+    {id:"ep",t:"Einführungsphase",r:[1,3],intro:"Basiskompetenzen für den eigenverantwortlichen Unterricht: Seminartage Mi/Do, Schulpraxis Mo/Di/Fr, Hospitationen."},
+    {id:"hp",t:"Hauptphase",r:[4,D-3],intro:"Eigener Unterricht, modularisierte Veranstaltungen nach eigenem Profil, UM/UB, Beratungsgespräche."},
+    {id:"pp",t:"Prüfungsphase",r:[D-2,D],intro:"Lage nur ungefähr: Die Prüfungstermine bestimmt das Landesprüfungsamt. Ab 4 Wochen vor der Prüfung keine Veranstaltungen mehr."}
+  ];
+  const open = JSON.parse(sessionStorage.getItem("ph_open")||'{"ep":true,"hp":true,"pp":false}');
+  $("#timeline").innerHTML = phases.map(p=>{
+    const items = EV.filter(e=>e.ph===p.id && (!e.only||e.only.includes(k)))
+      .map(e=>({e,a:resolve(e.m[0],D),b:resolve(e.m[1],D)}))
+      .sort((x,y)=>x.a-y.a||x.b-y.b);
+    return `<details class="phase ${p.id}" data-ph="${p.id}" ${open[p.id]?"open":""}>
+      <summary><span class="chev">&#9656;</span><span class="badge">${p.id==="ep"?"Phase 1":p.id==="hp"?"Phase 2":"Phase 3"}</span>${p.t}<span class="when">${rangeLabel(p.r[0],p.r[1])}</span></summary>
+      <div class="phase-intro">${p.intro}</div>
+      <div class="tl">${items.map(({e,a,b})=>`
+        <details class="ev cat-${e.cat}" data-a="${a}" data-b="${b}">
+          <summary><span class="m">${rangeLabel(a,b)}</span><span class="t">${e.t}</span>${e.tag?`<span class="tag">${e.tag}</span>`:""}</summary>
+          <div class="body">${e.d(k,c,D)}</div>
+        </details>`).join("")}</div>
+    </details>`;
+  }).join("");
+  document.querySelectorAll("details.phase").forEach(d=>d.addEventListener("toggle",()=>{
+    const o={};document.querySelectorAll("details.phase").forEach(x=>o[x.dataset.ph]=x.open);
+    sessionStorage.setItem("ph_open",JSON.stringify(o));
+  }));
+  applySel(false);
+}
+
+function applySel(scroll){
+  const m=st.sel; $("#clearSel").hidden = m===null;
+  let first=null;
+  document.querySelectorAll("details.ev").forEach(d=>{
+    d.classList.remove("hl","dim");
+    if(m===null) return;
+    const hit = m>=+d.dataset.a && m<=+d.dataset.b;
+    d.classList.add(hit?"hl":"dim");
+    if(hit){ d.closest("details.phase").open=true; if(!first) first=d; }
+  });
+  if(scroll&&first) first.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function renderCompare(){
+  const rows=[
+    ["Dauer",k=>CFG[k].durFix?CFG[k].dur+" Monate":"nicht im Journal genannt"],
+    ["Rechtsgrundlage",k=>CFG[k].recht],
+    ["Ausbildungseinheiten",k=>CFG[k].ae+"<br><small>"+CFG[k].aeS+"</small>"],
+    ["Unterricht",k=>CFG[k].hoursText+"<br><small>"+CFG[k].hoursS+"</small>"],
+    ["UM / UB",k=>CFG[k].ub+"<br><small>"+CFG[k].ubS+"</small>"],
+    ["Päd. Grundbildung",k=>CFG[k].pgb?"8 Veranst., davon "+CFG[k].pgb+" in der Einführungsphase":"–"],
+    ["BP-Veranstaltungen (min.)",k=>CFG[k].bp],
+    ["FD-Veranstaltungen (min.)",k=>CFG[k].fd],
+    ["Praktische Prüfung",k=>k==="lffp"?"1 PU, Thema 5 WT vorher":k==="fl"?"2 PU in 2 Schulformen am selben Tag, Themen 10 WT vorher":"je Fach 1 PU, Themen 5 WT vorher (10 WT bei gleichem Tag)"],
+    ["Mündliche Prüfung",k=>k==="lffp"?"Präsentation 30 Min. + BP 20 Min.":k==="fl"?"Präsentation 30 Min. + BP 30 Min.":"Präsentation + FD anderes Fach + BP, je 30 Min."],
+    ["Präsentationsthema",k=>isFL(k)?"20 WT vorher":"5 WT vorher"]
+  ];
+  $("#compare").innerHTML=`<table><tr><th></th>${ORDER.map(k=>`<th class="${k===st.cfg?"cur":""}">${CFG[k].name}</th>`).join("")}</tr>${rows.map(([l,f])=>`<tr><th>${l}</th>${ORDER.map(k=>`<td class="${k===st.cfg?"cur":""}">${f(k)}</td>`).join("")}</tr>`).join("")}</table>`;
+}
+
+const JOURNALS=[
+  ["Orga-Journal VD18 / VD24 / LWRef","Stand 04/2026","Einführungsphase, Digitales Notizbuch, Hospitationen, UM/UB, Beratungsgespräche in Xi, Veranstaltungsarten, Inklusion, Prüfungsunterricht, Präsentations- und mündliche Prüfung, Mentorenschaft, Neuzugewanderte im Fachunterricht."],
+  ["Orga-Journal Seiteneinstieg","Stand 04/2026","Wie oben, aber auf Basis der LehrSeitVO 2023 und der VV 2021: Intensivausbildung (3 Monate), 40 AE, gestaffelte Freistellung (½ → ⅓ → ¼), mind. 5 UB je Fach."],
+  ["Orga-Journal FL / LfFP","Stand 04/2026","LVO und VV von 2013: AE-Verteilung FL/LfFP, max. 20 Std. Ausbildungsunterricht (≤ 12 selbstständig), UM/UB-Zahlen, abweichende Prüfungsformate und Fristen (Präsentationsthema 20 WT vorher)."],
+  ["Journal Digitales Notizbuch","Stand 02/2024","Zweck und Form des Notizbuchs; verbindliche Inhalte zum Vierteljahres-, Halbjahres- (M4 K1.1/K1.2) und Jahresgespräch (+ M5 K4); Zielformulierung mit Beispielen."],
+  ["Journal Reflexion & Beratung","Stand 02/2024","Beratungsverständnis in der Lehrkräfteausbildung, Grundannahmen und Prämissen des Reflexionsansatzes, Gestaltung der Besprechung nach UM/UB."],
+  ["Journal Unterrichtsentwurf","","Aufbau des UB-Entwurfs: Konzept, Lerngruppe, Rahmenbedingungen, Kompetenzauswahl, didaktische und methodische Elemente, Sozialformen, Verlaufsübersicht (Struktogramm), Materialien. Richtwert ca. 7 Seiten ohne Anhang."],
+  ["Journal Didaktik","Stand 07/2025","Gemäßigt konstruktivistische Didaktik, vom Lehrplan zur Lernsituation zur Lernaufgabe, Methodenreservoir nach Unterrichtsphasen, digitales Lernen und KI in der Schule."],
+  ["Journal Kompetenzorientierung","Stand 10/2024","Kompetenzbereiche, dreiteilige Kompetenzformulierung, Performanz statt Lernziel, Planung, Methoden und Leistungsbewertung; Fachbeispiele u. a. Informatik, Wirtschaft, Bautechnik."],
+  ["Journal Modulsystem","Stand 2013","Modularisierung der Ausbildung, Veranstaltungsarten und -status (Pflicht/Wahlpflicht/Wahl), Mindestzahlen je Ausbildungsweg, Belegung über Stud.IP."],
+  ["Journal Projekt","Stand 02/2026","Projektmethode, Phasen, Fixpunkte und Metainteraktion; Ablauf der Projekttage am Seminar (Ideen einreichen, Gruppen, Projektleitung, Anrechnung als 3 SV)."]
+];
+function renderStatic(){
+  $("#journals").innerHTML=JOURNALS.map(([t,s,d])=>`<div><b>${t}</b>${s?`<span>${s}</span><br>`:""}${d}</div>`).join("");
+  const A={AE:"Ausbildungseinheit",AV:"Aufbauveranstaltung",BP:"Berufspraktisches Seminar",BV:"Basisveranstaltung",DAP:"Didaktische Abschnittsplanung",FD:"Fachdidaktisches Seminar / Veranstaltung",FDÜ:"Fachdidaktisch übergreifende Veranstaltung",FL:"Fachlehrkraft (bzw. Fachleitung)",LfFP:"Lehrkraft für Fachpraxis",LWRef:"Landwirtschaftsreferendar/in",ORGA:"Organisatorische Veranstaltung",PGB:"Pädagogische Grundbildung",PU:"Prüfungsunterricht",PW:"Planungsworkshop",SE:"Seiteneinstieg",StRef:"Studienreferendar/in",SV:"Sonderveranstaltung",TOP:"Theorie-Praxis-Veranstaltung",UB:"Unterrichtsbesuch",UM:"Unterrichtsmitschau",VD:"Vorbereitungsdienst",WT:"Werktag (ohne Samstag)",Xi:"Portal K-Reflekt für Beratungen, Entwürfe, Niederschriften"};
+  $("#abk").innerHTML=Object.entries(A).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("");
+}
+
+function render(){renderChips();renderControls();renderFacts();renderRibbon();renderTimeline();renderCompare()}
+
+/* ===================== Events ===================== */
+$("#startMonth").onchange=e=>{st.sm=+e.target.value;save();render()};
+$("#startYear").onchange=e=>{st.sy=+e.target.value||st.sy;save();render()};
+$("#dep").oninput=e=>{const v=+e.target.value;if(v>0){st.dep=v;save();renderFacts();renderRibbon();renderTimeline()}};
+$("#dur").onchange=e=>{st.dur[st.cfg]=+e.target.value;st.sel=null;save();render()};
+$("#openAll").onclick=()=>document.querySelectorAll("#timeline details").forEach(d=>d.open=true);
+$("#closeAll").onclick=()=>document.querySelectorAll("#timeline details").forEach(d=>d.open=false);
+$("#clearSel").onclick=()=>{st.sel=null;renderRibbon();applySel(false)};
+function expandAndPrint(){document.querySelectorAll("details").forEach(d=>d.open=true);window.print()}
+
+renderStatic(); render();
+</script>
+</body>
+</html>
